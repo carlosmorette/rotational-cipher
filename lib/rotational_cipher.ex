@@ -36,7 +36,7 @@ defmodule RotationalCipher do
     compute(char + shift, ?A, ?Z)
   end
 
-  def compute(char, shift) when char in @numbers, do: <<char::utf8>>
+  def compute(char, _shift) when char in @numbers, do: <<char::utf8>>
 
   def compute(char, _shift), do: <<char::utf8>>
 
