@@ -11,6 +11,8 @@ defmodule RotationalCipher do
 
   @upper ?A..?Z
 
+  @numbers ?0..?9
+
   @spec rotate(text :: String.t(), shift :: integer) :: String.t()
   def rotate(<<char::utf8, rest::binary>>, shift) do
     rotate_reduce(process(char, shift), rest, shift)
@@ -23,26 +25,20 @@ defmodule RotationalCipher do
   end
 
   def process(char, shift) do
-    <<char::utf8>>
-    |> Integer.parse()
-    |> case do
-      {_, ""} ->
-        <<char::utf8>>
-
-      _ ->
-        compute(char, shift)
-    end
+    compute(char, shift)
   end
 
-  def compute(n, shift) when n in @lower do
-    compute(n + shift, ?a, ?z)
+  def compute(char, shift) when char in @lower do
+    compute(char + shift, ?a, ?z)
   end
 
-  def compute(n, shift) when n in @upper do
-    compute(n + shift, ?A, ?Z)
+  def compute(char, shift) when char in @upper do
+    compute(char + shift, ?A, ?Z)
   end
 
-  def compute(n, _shift), do: <<n>>
+  def compute(char, shift) when char in @numbers, do: <<char::utf8>>
+
+  def compute(char, _shift), do: <<char::utf8>>
 
   def compute(n, startn, endn) do
     if n > endn do
@@ -51,6 +47,4 @@ defmodule RotationalCipher do
       <<n>>
     end
   end
-
-  def is_uppercase(l), do: l == String.upcase(l)
 end
