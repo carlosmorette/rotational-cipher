@@ -11,21 +11,15 @@ defmodule RotationalCipher do
 
   @upper ?A..?Z
 
-  @numbers ?0..?9
-
   @spec rotate(text :: String.t(), shift :: integer) :: String.t()
   def rotate(<<char::utf8, rest::binary>>, shift) do
-    rotate_reduce(process(char, shift), rest, shift)
+    rotate_reduce(compute(char, shift), rest, shift)
   end
 
   def rotate_reduce(acc, "", _), do: acc
 
   def rotate_reduce(acc, <<char::utf8, rest::binary>>, shift) do
-    rotate_reduce(acc <> process(char, shift), rest, shift)
-  end
-
-  def process(char, shift) do
-    compute(char, shift)
+    rotate_reduce(acc <> compute(char, shift), rest, shift)
   end
 
   def compute(char, shift) when char in @lower do
@@ -35,8 +29,6 @@ defmodule RotationalCipher do
   def compute(char, shift) when char in @upper do
     compute(char + shift, ?A, ?Z)
   end
-
-  def compute(char, _shift) when char in @numbers, do: <<char::utf8>>
 
   def compute(char, _shift), do: <<char::utf8>>
 
